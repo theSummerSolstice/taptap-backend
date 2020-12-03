@@ -17,8 +17,11 @@ app.set('view engine', 'pug');
 
 app.use(cors({
   origin: 'http://localhost:3000',
+  optionsSuccessStatus: 200,
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 }));
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
