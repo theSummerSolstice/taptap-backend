@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const loginRouter = require('./login');
 
-router.get('/', (req, res, next) => {
-  res.json({ result: 'OK' });
-});
+router.use('/login', loginRouter);
 
 module.exports = router;

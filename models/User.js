@@ -20,10 +20,12 @@ const UserSchema = new Schema({
   myBoards: [{
     type: ObjectId,
     ref: 'Board',
+    default: [],
   }],
   authorizedBoards: [{
     type: ObjectId,
     ref: 'Board',
+    default: [],
   }],
 }, {
   timestamps: true,
