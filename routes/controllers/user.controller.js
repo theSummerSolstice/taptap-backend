@@ -38,3 +38,13 @@ exports.googleLogin = async (req, res, next) => {
     data: { token, user: targetUser }
   });
 };
+
+exports.sendUserInfo = async (req, res, next) => {
+  const user = res.locals.user;
+  const targetUser = await userService.getUser(user.email);
+
+  res.status(200).json({
+    result: 'OK',
+    data: { user: targetUser },
+  });
+};
