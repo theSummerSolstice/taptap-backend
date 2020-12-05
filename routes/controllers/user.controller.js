@@ -6,7 +6,7 @@ exports.googleLogin = async (req, res, next) => {
   const { email, username, imageSrc } = req.body;
 
   try {
-    const targetUser = await userService.getUser(email);
+    const targetUser = await userService.getUserByEmail(email);
 
     if (!targetUser) {
       const newUser = await userService.createUser({
@@ -52,7 +52,7 @@ exports.sendUserInfo = async (req, res, next) => {
   const user = res.locals.user;
 
   try {
-    const targetUser = await userService.getUser(user.email);
+    const targetUser = await userService.getUserById(user.id);
 
     res.status(200).json({
       result: 'OK',
