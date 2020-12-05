@@ -24,3 +24,10 @@ exports.updateMyBoards = async (id, data) => {
     { $addToSet: { myBoards: data } },
   );
 };
+
+exports.deleteMyBoard = async (userId, boardId) => {
+  await User.findByIdAndUpdate(
+    userId,
+    { $pull: { 'myBoards': boardId } },
+  );
+};
