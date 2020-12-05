@@ -46,8 +46,7 @@ const BoardSchema = new Schema({
     ref: 'User',
   },
   authorizedUsers: [{
-    type: ObjectId,
-    ref: 'User',
+    type: String,
   }],
   isPublic: {
     type: Boolean,
