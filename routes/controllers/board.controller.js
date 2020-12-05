@@ -1,21 +1,18 @@
-const Board = require('../../models/Board');
-const User = require('../../models/User');
+const boardService = require('../../services/board.service');
+const userService = require('../../services/user.service');
 
 exports.createBoard = async (req, res, next) => {
   const { name, owner, isPublic, authorizedUsers } = req.body;
 
   try {
-    const newBoard = await Board.create({
+    const newBoard = await boardService.createBoard({
       name,
       owner,
       isPublic: Boolean(isPublic),
       authorizedUsers,
     });
 
-    await User.findByIdAndUpdate(
-      owner,
-      { $addToSet: { myBoards: newBoard._id } }
-    );
+    await userService.updateMyBoards(owner, newBoard._id);
 
     res.status(201).json({ result: 'OK', data: { board: newBoard } });
   } catch (error) {
