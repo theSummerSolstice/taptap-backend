@@ -20,9 +20,22 @@ exports.createBoard = async (req, res, next) => {
   }
 };
 
+exports.updateBoard = async (req, res, next) => {
+  const { boardId } = req.params;
+  const data = req.body;
+
+  try {
+    await boardService.updateBoard(boardId, data);
+    res.status(200).json({ result: 'OK' });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // TODO: authorizedUsers의 authorizedBoards에서도 삭제 필요
 exports.deleteBoard = async (req, res, next) => {
-  const { userId, boardId } = req.body;
+  const { boardId } = req.params;
+  const { userId } = req.body;
 
   try {
     await boardService.deleteBoard(boardId);
@@ -33,3 +46,16 @@ exports.deleteBoard = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.sendInviteMail = async (req, res, next) => {
+  const { boardId } = req.params;
+  const { email } = req.body;
+
+  try {
+    await boardService.sendInviteMail(email, boardId);
+    res.status(200).json({ result: 'OK' });
+  } catch (error) {
+    next(error);
+  }
+};
+
