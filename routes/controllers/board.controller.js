@@ -46,3 +46,16 @@ exports.deleteBoard = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.sendInviteMail = async (req, res, next) => {
+  const { boardId } = req.params;
+  const { email } = req.body;
+
+  try {
+    await boardService.sendInviteMail(email, boardId);
+    res.status(200).json({ result: 'OK' });
+  } catch (error) {
+    next(error);
+  }
+};
+
