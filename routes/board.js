@@ -4,6 +4,7 @@ const { verifyToken } = require('./middlewares/verifyToken');
 const boardController = require('./controllers/board.controller');
 
 router.post('/', verifyToken, boardController.createBoard);
-router.delete('/', verifyToken, boardController.deleteBoard);
+router.put('/:boardId', verifyToken, boardController.updateBoard);
+router.delete('/:boardId', verifyToken, boardController.deleteBoard);
 
 module.exports = router;
