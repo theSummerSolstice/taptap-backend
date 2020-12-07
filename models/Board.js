@@ -57,6 +57,10 @@ const BoardSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  isCategorized: {
+    type: Boolean,
+    default: false,
+  },
   imageSrc: {
     type: String,
     default: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Graph-paper.svg/768px-Graph-paper.svg.png',

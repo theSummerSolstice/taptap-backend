@@ -20,6 +20,17 @@ exports.createBoard = async (req, res, next) => {
   }
 };
 
+exports.getBoard = async (req, res, next) => {
+  const { boardId } = req.params;
+
+  try {
+    const board = await boardService.getBoard(boardId);
+    res.status(200).json({ result: 'OK', data: { board } });
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.updateBoard = async (req, res, next) => {
   const { boardId } = req.params;
   const data = req.body;

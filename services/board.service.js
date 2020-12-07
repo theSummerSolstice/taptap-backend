@@ -7,6 +7,11 @@ exports.createBoard = async (boardInfo) => {
   return newBoard;
 };
 
+exports.getBoard = async (boardId) => {
+  const board = await Board.findById(boardId);
+  return board;
+};
+
 exports.updateBoard = async (id, data) => {
   await Board.findByIdAndUpdate(
     id,
