@@ -4,9 +4,12 @@ const Schema = mongoose.Schema;
 const { ObjectId } = Schema.Types;
 
 const NoteSchema = new Schema({
+  _id: {
+    type: Number,
+    required: true,
+  },
   owner: {
-    type: ObjectId,
-    ref: 'User',
+    type: String,
   },
   contents: {
     type: String,
@@ -57,9 +60,17 @@ const BoardSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  isCategorized: {
+    type: Boolean,
+    default: false,
+  },
   imageSrc: {
     type: String,
     default: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Graph-paper.svg/768px-Graph-paper.svg.png',
+  },
+  currentNotes: {
+    type: [NoteSchema],
+    default: [],
   },
   snapshots: {
     type: [SnapshotSchema],

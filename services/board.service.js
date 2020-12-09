@@ -7,10 +7,22 @@ exports.createBoard = async (boardInfo) => {
   return newBoard;
 };
 
-exports.updateBoard = async (id, data) => {
+exports.getBoard = async (boardId) => {
+  const board = await Board.findById(boardId).lean();
+  return board;
+};
+
+exports.updateAuthorizedUsers = async (id, data) => {
   await Board.findByIdAndUpdate(
     id,
     { $set: { authorizedUsers: data } },
+  );
+};
+
+exports.updateCurrentNotes = async (id, data) => {
+  await Board.findByIdAndUpdate(
+    id,
+    { $set: { currentNotes: data } },
   );
 };
 
