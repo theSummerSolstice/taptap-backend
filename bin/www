@@ -7,6 +7,7 @@
 const app = require('../app');
 const debug = require('debug')('taptap-backend:server');
 const http = require('http');
+const { socketIO } = require('../services/socket.service');
 
 /**
  * Get port from environment and store in Express.
@@ -20,7 +21,7 @@ app.set('port', port);
  */
 
 const server = http.createServer(app);
-require('../services/socket.service')(server);
+socketIO(server);
 /**
  * Listen on provided port, on all network interfaces.
  */
