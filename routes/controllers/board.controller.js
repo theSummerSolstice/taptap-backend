@@ -1,5 +1,6 @@
 const boardService = require('../../services/board.service');
 const userService = require('../../services/user.service');
+const { boards } = require('../../services/socket.service');
 
 exports.createBoard = async (req, res, next) => {
   const { name, owner, isPublic, authorizedUsers } = req.body;
@@ -24,6 +25,11 @@ exports.getBoard = async (req, res, next) => {
   const { boardId } = req.params;
 
   try {
+    if (boardId in boards) {
+      res.status(200).json({ result: 'OK', data: { board: boards[boardId] } });
+      return;
+    }
+
     const board = await boardService.getBoard(boardId);
     res.status(200).json({ result: 'OK', data: { board } });
   } catch (error) {
@@ -31,12 +37,12 @@ exports.getBoard = async (req, res, next) => {
   }
 };
 
-exports.updateBoard = async (req, res, next) => {
+exports.updateAuthorizedUsers = async (req, res, next) => {
   const { boardId } = req.params;
   const data = req.body;
 
   try {
-    await boardService.updateBoard(boardId, data);
+    await boardService.updateAuthorizedUsers(boardId, data);
     res.status(200).json({ result: 'OK' });
   } catch (error) {
     next(error);

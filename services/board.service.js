@@ -8,14 +8,21 @@ exports.createBoard = async (boardInfo) => {
 };
 
 exports.getBoard = async (boardId) => {
-  const board = await Board.findById(boardId);
+  const board = await Board.findById(boardId).lean();
   return board;
 };
 
-exports.updateBoard = async (id, data) => {
+exports.updateAuthorizedUsers = async (id, data) => {
   await Board.findByIdAndUpdate(
     id,
     { $set: { authorizedUsers: data } },
+  );
+};
+
+exports.updateCurrentNotes = async (id, data) => {
+  await Board.findByIdAndUpdate(
+    id,
+    { $set: { currentNotes: data } },
   );
 };
 
