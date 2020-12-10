@@ -5,7 +5,7 @@ const { ObjectId } = Schema.Types;
 
 const NoteSchema = new Schema({
   _id: {
-    type: Number,
+    type: String,
     required: true,
   },
   owner: {

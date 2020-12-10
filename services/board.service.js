@@ -12,10 +12,10 @@ exports.getBoard = async (boardId) => {
   return board;
 };
 
-exports.updateAuthorizedUsers = async (id, data) => {
+exports.updateBoard = async (id, data, updatedItem) => {
   await Board.findByIdAndUpdate(
     id,
-    { $set: { authorizedUsers: data } },
+    { $set: { [updatedItem]: data } },
   );
 };
 

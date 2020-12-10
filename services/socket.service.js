@@ -59,6 +59,18 @@ const socketIO = (server) => {
       io.to(boardId).emit('deleteNote', { noteId });
     });
 
+    socket.on('updateNotePosition', ({ boardId, noteId, position }) => {
+      const updatedNoteList = boards[boardId].currentNotes.map((note) => {
+        if (note._id === noteId) {
+          return { ...note, position };
+        }
+        return note;
+      });
+
+      boards[boardId].currentNotes = updatedNoteList;
+      io.to(boardId).emit('updateNotePosition', { noteId, position });
+    });
+
     socket.on('disconnect', () => {
       console.log('disconnect');
     });

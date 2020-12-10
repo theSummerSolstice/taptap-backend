@@ -37,12 +37,12 @@ exports.getBoard = async (req, res, next) => {
   }
 };
 
-exports.updateAuthorizedUsers = async (req, res, next) => {
+exports.updateBoard = async (req, res, next) => {
   const { boardId } = req.params;
-  const data = req.body;
+  const { data, updatedItem } = req.body;
 
   try {
-    await boardService.updateAuthorizedUsers(boardId, data);
+    await boardService.updateBoard(boardId, data, updatedItem);
     res.status(200).json({ result: 'OK' });
   } catch (error) {
     next(error);
