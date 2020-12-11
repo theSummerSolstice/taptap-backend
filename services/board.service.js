@@ -12,10 +12,10 @@ exports.getBoard = async (boardId) => {
   return board;
 };
 
-exports.updateAuthorizedUsers = async (id, data) => {
+exports.updateBoard = async (id, data, updatedItem) => {
   await Board.findByIdAndUpdate(
     id,
-    { $set: { authorizedUsers: data } },
+    { $set: { [updatedItem]: data } },
   );
 };
 
@@ -47,7 +47,7 @@ exports.sendInviteMail = async (email, boardId) => {
     subject: 'You are invited to taptap board👻',
     html:
       '<p>Please click link below.</p>' +
-      '<a href="http://localhost:3000/board/' + boardId + '&email=' + email + '">Accept invitation</a>',
+      '<a href="http://localhost:3000/board/' + boardId +'">Accept invitation</a>',
   };
 
   transporter.sendMail(mailOptions, (error, info) => {

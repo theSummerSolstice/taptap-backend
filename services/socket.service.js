@@ -1,4 +1,5 @@
 const boardService = require('../services/board.service');
+const userService = require('../services/user.service');
 
 const boards = {};
 
@@ -13,10 +14,11 @@ const socketIO = (server) => {
 
       if (!(boardId in boards)) {
         const boardInfo = await boardService.getBoard(boardId);
-        boards[boardId] = {
-          ...boardInfo,
-          users: [],
-        };
+        boards[boardId] = { ...boardInfo, users: [] };
+      }
+
+      if (!boards[boardId].owner.equals(user._id)) {
+        await userService.updateAuthorizedBoards(user._id, boardId);
       }
 
       socket.join(boardId);
@@ -57,6 +59,18 @@ const socketIO = (server) => {
 
       boards[boardId].currentNotes = filteredNoteList;
       io.to(boardId).emit('deleteNote', { noteId });
+    });
+
+    socket.on('updateNotePosition', ({ boardId, noteId, position }) => {
+      const updatedNoteList = boards[boardId].currentNotes.map((note) => {
+        if (note._id === noteId) {
+          return { ...note, position };
+        }
+        return note;
+      });
+
+      boards[boardId].currentNotes = updatedNoteList;
+      io.to(boardId).emit('updateNotePosition', { noteId, position });
     });
 
     socket.on('disconnect', () => {
