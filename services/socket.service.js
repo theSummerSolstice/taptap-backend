@@ -36,14 +36,15 @@ const socketIO = (server) => {
         return user.id !== userId;
       });
 
-      if (filteredUserList.length === 0) {
-        await boardService.updateCurrentNotes(boardId, boards[boardId].currentNotes);
-      }
-
       socket.leave(boardId);
-      boards[boardId].users = filteredUserList;
 
-      io.to(boardId).emit('leaveUser', { board: boards[boardId] });
+      if (!filteredUserList.length) {
+        await boardService.updateCurrentNotes(boardId, boards[boardId].currentNotes);
+        delete boards[boardId];
+      } else {
+        boards[boardId].users = filteredUserList;
+        io.to(boardId).emit('leaveUser', { board: boards[boardId] });
+      }
     });
 
     socket.on('addNote', ({ boardId, note }) => {

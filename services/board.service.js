@@ -13,10 +13,17 @@ exports.getBoard = async (boardId) => {
 };
 
 exports.updateBoard = async (id, data, updatedItem) => {
-  await Board.findByIdAndUpdate(
-    id,
-    { $set: { [updatedItem]: data } },
-  );
+  if (typeof data === 'string') {
+    await Board.findByIdAndUpdate(
+      id,
+      { $set: { [updatedItem]: data } },
+    );
+  } else {
+    await Board.findByIdAndUpdate(
+      id,
+      { $push: { [updatedItem]: data } },
+    );
+  }
 };
 
 exports.updateCurrentNotes = async (id, data) => {
@@ -28,6 +35,20 @@ exports.updateCurrentNotes = async (id, data) => {
 
 exports.deleteBoard = async (id) => {
   await Board.findByIdAndRemove(id);
+};
+
+exports.deleteSnapshots = async (id, index) => {
+  await Board.findByIdAndUpdate(
+    id,
+    {
+      $push: {
+        snapshots: {
+          $each: [],
+          $slice: index,
+        },
+      },
+    },
+  );
 };
 
 exports.sendInviteMail = async (email, boardId) => {
