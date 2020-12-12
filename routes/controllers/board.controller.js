@@ -76,3 +76,14 @@ exports.sendInviteMail = async (req, res, next) => {
   }
 };
 
+exports.deleteSnapshots = async (req, res, next) => {
+  const { boardId } = req.params;
+  const { index } = req.body;
+
+  try {
+    await boardService.deleteSnapshots(boardId, index);
+    res.status(200).json({ result: 'OK' });
+  } catch (error) {
+    next(error);
+  }
+};
