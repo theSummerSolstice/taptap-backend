@@ -74,6 +74,18 @@ const socketIO = (server) => {
       io.to(boardId).emit('updateNotePosition', { noteId, position });
     });
 
+    socket.on('historyModeOn', ({ boardId }) => {
+      socket.broadcast.to(boardId).emit('historyModeOn', { data: 'HISTORY' });
+    });
+
+    socket.on('historyModeOff', ({ boardId }) => {
+      socket.broadcast.to(boardId).emit('historyModeOff', { data: 'EDIT' });
+    });
+
+    socket.on('selectVersion', ({ boardId, notes }) => {
+      socket.broadcast.to(boardId).emit('selectVersion', { notes });
+    });
+
     socket.on('disconnect', () => {
       console.log('disconnect');
     });
