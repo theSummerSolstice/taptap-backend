@@ -24,6 +24,10 @@ const NoteSchema = new Schema({
     x: Number,
     y: Number,
   },
+  color: {
+    type: String,
+    required: true,
+  },
 }, {
   timestamps: true,
 });
