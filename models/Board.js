@@ -34,11 +34,6 @@ const NoteSchema = new Schema({
 
 const SnapshotSchema = new Schema({
   notes: [NoteSchema],
-  isSnapshotted: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
 }, {
   timestamps: true,
 });
@@ -60,14 +55,13 @@ const BoardSchema = new Schema({
     required: true,
     default: true,
   },
-  isLocked: {
-    type: Boolean,
-    default: false,
-  },
   isCategorized: {
     type: Boolean,
     default: false,
   },
+  layout: [{
+    type: Object,
+  }],
   imageSrc: {
     type: String,
     default: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Graph-paper.svg/768px-Graph-paper.svg.png',
