@@ -21,14 +21,14 @@ exports.updateMyBoards = async (id, data) => {
   const objectId = mongoose.Types.ObjectId(id);
   await User.findByIdAndUpdate(
     objectId,
-    { $addToSet: { 'myBoards': data } },
+    { $addToSet: { myBoards: data } },
   );
 };
 
 exports.deleteMyBoard = async (userId, boardId) => {
   await User.findByIdAndUpdate(
     userId,
-    { $pull: { 'myBoards': boardId } },
+    { $pull: { myBoards: boardId } },
   );
 };
 
@@ -37,6 +37,6 @@ exports.updateAuthorizedBoards = async (id, boardId) => {
 
   await User.findByIdAndUpdate(
     objectId,
-    { $addToSet: { 'authorizedBoards': boardId } },
+    { $addToSet: { authorizedBoards: boardId } },
   );
 };
