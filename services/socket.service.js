@@ -2,6 +2,7 @@ const boardService = require('../services/board.service');
 const userService = require('../services/user.service');
 
 const boards = {};
+const currentUsers = {};
 
 const socketIO = (server) => {
   const io = require('socket.io').listen(server);
@@ -23,10 +24,12 @@ const socketIO = (server) => {
 
       socket.join(boardId);
       boards[boardId].users.push({
+        socketId: socket.id,
         id: _id,
         email,
         username,
       });
+      currentUsers[socket.id] = boardId;
 
       io.to(boardId).emit('joinUser', { board: boards[boardId] });
     });
@@ -71,7 +74,7 @@ const socketIO = (server) => {
       });
 
       boards[boardId].currentNotes = updatedNoteList;
-      io.to(boardId).emit('updateNotePosition', { noteId, position });
+      socket.broadcast.to(boardId).emit('updateNotePosition', { noteId, position });
     });
 
     socket.on('historyModeOn', ({ boardId }) => {
@@ -86,10 +89,33 @@ const socketIO = (server) => {
       socket.broadcast.to(boardId).emit('selectVersion', { notes });
     });
 
-    socket.on('disconnect', () => {
-      console.log('disconnect');
+    socket.on('startCategorize', ({ boardId }) => {
+      socket.broadcast.to(boardId).emit('startCategorize', { data: true });
     });
 
+    socket.on('addCategory', ({ boardId, categoryName, layout }) => {
+      socket.broadcast.to(boardId).emit('addCategory', { categoryName, layout });
+    });
+
+    socket.on('deleteCategory', ({ boardId, index, layout }) => {
+      socket.broadcast.to(boardId).emit('deleteCategory', { index, layout });
+    });
+
+    socket.on('updateLayout', ({ boardId, layout }) => {
+      socket.broadcast.to(boardId).emit('updateLayout', { layout });
+    });
+
+    socket.on('disconnect', () => {
+      const boardId = currentUsers[socket.id];
+
+      if (!boards[boardId]) return;
+
+      const filteredUserList = boards[boardId].users.filter((item) => {
+        return item.socketId !== socket.id;
+      });
+
+      boards[boardId].users = filteredUserList;
+    });
   });
 };
 
