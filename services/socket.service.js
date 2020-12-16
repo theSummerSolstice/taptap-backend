@@ -61,7 +61,7 @@ const socketIO = (server) => {
       if (!filteredUserList.length) {
         await boardService.updateCurrentNotes(
           boardId,
-          boards[boardId].currentNotes,
+          { currentNotes: boards[boardId].currentNotes },
         );
         delete boards[boardId];
       } else {
