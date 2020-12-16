@@ -12,24 +12,27 @@ exports.getBoard = async (boardId) => {
   return board;
 };
 
-exports.updateBoard = async (id, data, updatedItem) => {
-  if (typeof data === 'string') {
-    await Board.findByIdAndUpdate(
-      id,
-      { $set: { [updatedItem]: data } },
-    );
-  } else {
-    await Board.findByIdAndUpdate(
-      id,
-      { $push: { [updatedItem]: data } },
-    );
-  }
+exports.updateBoard = async (id, data) => {
+  const updatedBoard = await Board.findByIdAndUpdate(
+    id,
+    { $set: data },
+    { new: true },
+  );
+
+  return updatedBoard;
 };
 
 exports.updateCurrentNotes = async (id, data) => {
   await Board.findByIdAndUpdate(
     id,
-    { $set: { currentNotes: data } },
+    { $set: data },
+  );
+};
+
+exports.updateSnapshots = async (id, data) => {
+  await Board.findByIdAndUpdate(
+    id,
+    { $push: data },
   );
 };
 

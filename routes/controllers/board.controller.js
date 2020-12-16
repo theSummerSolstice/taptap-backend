@@ -39,10 +39,34 @@ exports.getBoard = async (req, res, next) => {
 
 exports.updateBoard = async (req, res, next) => {
   const { boardId } = req.params;
-  const { data, updatedItem } = req.body;
+  const { data } = req.body;
 
   try {
-    await boardService.updateBoard(boardId, data, updatedItem);
+    const updatedBoard = await boardService.updateBoard(boardId, data);
+    res.status(200).json({ result: 'OK', data: { board: updatedBoard } });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.updateSnapshots = async (req, res, next) => {
+  const { boardId } = req.params;
+  const { data } = req.body;
+
+  try {
+    await boardService.updateSnapshots(boardId, data);
+    res.status(200).json({ result: 'OK' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.updateCurrentNotes = async (req, res, next) => {
+  const { boardId } = req.params;
+  const { data } = req.body;
+
+  try {
+    await boardService.updateCurrentNotes(boardId, data);
     res.status(200).json({ result: 'OK' });
   } catch (error) {
     next(error);

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
-const { ObjectId } = Schema.Types;
+const { ObjectId, Mixed } = Schema.Types;
 
 const NoteSchema = new Schema({
   _id: {
@@ -34,11 +34,6 @@ const NoteSchema = new Schema({
 
 const SnapshotSchema = new Schema({
   notes: [NoteSchema],
-  isSnapshotted: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
 }, {
   timestamps: true,
 });
@@ -60,14 +55,23 @@ const BoardSchema = new Schema({
     required: true,
     default: true,
   },
-  isLocked: {
-    type: Boolean,
-    default: false,
-  },
   isCategorized: {
     type: Boolean,
     default: false,
   },
+  layouts: [{
+    type: Mixed,
+    get: (data) => {
+      try {
+        return JSON.parse(data);
+      } catch (error) {
+        return data;
+      }
+    },
+    set: (data) => {
+      return JSON.stringify(data);
+    }
+  }],
   imageSrc: {
     type: String,
     default: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Graph-paper.svg/768px-Graph-paper.svg.png',
