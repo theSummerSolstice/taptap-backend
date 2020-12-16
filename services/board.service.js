@@ -25,7 +25,7 @@ exports.updateBoard = async (id, data) => {
 exports.updateCurrentNotes = async (id, data) => {
   await Board.findByIdAndUpdate(
     id,
-    { $set: { currentNotes: data } },
+    { $set: data },
   );
 };
 
@@ -33,13 +33,6 @@ exports.updateSnapshots = async (id, data) => {
   await Board.findByIdAndUpdate(
     id,
     { $push: data },
-  );
-};
-
-exports.updateLayout = async (id, data) => {
-  await Board.findByIdAndUpdate(
-    id,
-    { $set: { layout: data } },
   );
 };
 

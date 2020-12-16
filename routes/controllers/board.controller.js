@@ -61,14 +61,12 @@ exports.updateSnapshots = async (req, res, next) => {
   }
 };
 
-// TODO: updateLayout 분리
 exports.updateCurrentNotes = async (req, res, next) => {
   const { boardId } = req.params;
   const { data } = req.body;
 
   try {
-    await boardService.updateCurrentNotes(boardId, data.notes);
-    // await boardService.updateLayout(boardId, data.layout);
+    await boardService.updateCurrentNotes(boardId, data);
     res.status(200).json({ result: 'OK' });
   } catch (error) {
     next(error);
