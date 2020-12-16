@@ -74,7 +74,7 @@ const BoardSchema = new Schema({
   }],
   imageSrc: {
     type: String,
-    default: 'https://doc-0k-8c-docs.googleusercontent.com/docs/securesc/vhccbc5irekbseue1jf1ccg54n0bshh7/t5kpkhufu1dem2uv2el4baaotoke6vi0/1608114600000/08406904874006010201/08406904874006010201/1fa_RHGu_TIdsFjCrMiP26HahA_zXTT_j?e=view&authuser=0&nonce=bnulnk33bvrug&user=08406904874006010201&hash=7tr88idaou3bljcp71t4h0m6jc6v899o',
+    default: 'https://drive.google.com/uc?id=1fa_RHGu_TIdsFjCrMiP26HahA_zXTT_j',
   },
   currentNotes: {
     type: [NoteSchema],
