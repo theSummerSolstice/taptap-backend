@@ -1,15 +1,15 @@
-const Board = require('../models/Board');
 const nodemailer = require('nodemailer');
 const smtpTransport = require('nodemailer-smtp-transport');
+const Board = require('../models/Board');
 
-exports.createBoard = async (boardInfo) => {
-  const newBoard = await Board.create(boardInfo);
-  return newBoard;
+exports.getBoard = async (id) => {
+  const board = await Board.findById(id).lean();
+  return board;
 };
 
-exports.getBoard = async (boardId) => {
-  const board = await Board.findById(boardId).lean();
-  return board;
+exports.createBoard = async (data) => {
+  const newBoard = await Board.create(data);
+  return newBoard;
 };
 
 exports.updateBoard = async (id, data) => {
@@ -21,6 +21,11 @@ exports.updateBoard = async (id, data) => {
 
   return updatedBoard;
 };
+
+exports.deleteBoard = async (id) => {
+  await Board.findByIdAndRemove(id);
+};
+
 
 exports.updateCurrentNotes = async (id, data) => {
   await Board.findByIdAndUpdate(
@@ -36,9 +41,6 @@ exports.updateSnapshots = async (id, data) => {
   );
 };
 
-exports.deleteBoard = async (id) => {
-  await Board.findByIdAndRemove(id);
-};
 
 exports.deleteSnapshots = async (id, index) => {
   await Board.findByIdAndUpdate(
@@ -54,7 +56,7 @@ exports.deleteSnapshots = async (id, index) => {
   );
 };
 
-exports.sendInviteMail = async (email, boardId) => {
+exports.sendInviteMail = async (email, id) => {
   const { GOOGLE_USER_EMAIL, GOOGLE_USER_PASSWORD } = process.env;
   const transporter = nodemailer.createTransport(smtpTransport({
     service: 'gmail',
@@ -70,8 +72,12 @@ exports.sendInviteMail = async (email, boardId) => {
     to: email,
     subject: 'You are invited to taptap board👻',
     html:
-      '<p>Please click link below.</p>' +
-      '<a href="http://localhost:3000/board/' + boardId +'">Accept invitation</a>',
+      process.env.NODE_ENV === 'production'
+        ? '<p>Please click link below.</p>' +
+          '<a href="' + process.env.ORIGIN_URI_PROD + '/board/' + id +'">Accept invitation</a>'
+        : '<p>Please click link below.</p>' +
+          '<a href="' + process.env.ORIGIN_URI_DEV + '/board/' + id +'">Accept invitation</a>',
+
   };
 
   transporter.sendMail(mailOptions, (error, info) => {

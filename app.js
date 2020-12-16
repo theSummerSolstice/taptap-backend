@@ -16,16 +16,16 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: process.env.NODE_ENV !== 'production'
+    ? process.env.ORIGIN_URI_DEV
+    : process.env.ORIGIN_URI_PROD,
   optionsSuccessStatus: 200,
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 }));
 
 app.use(logger('dev'));
-app.use(express.json({
-  limit: '5mb'
-}));
+app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));

@@ -1,11 +1,15 @@
 const jwt = require('jsonwebtoken');
 const { SECRET_TOKEN_KEY } = process.env;
+const { RES_MESSAGE } = require('../../constants');
 
-exports.verifyToken = (req, res, next) => {
+const verifyToken = (req, res, next) => {
   const token = req.headers.authorization;
 
   if (!token) {
-    res.status(401).json({ reulst: 'FAIL', message: 'Unauthorized' });
+    res.status(401).json({
+      result: RES_MESSAGE.FAIL,
+      message: RES_MESSAGE.UNAUTHORIZED
+    });
     return;
   }
 
@@ -13,3 +17,5 @@ exports.verifyToken = (req, res, next) => {
   res.locals.user = decoded;
   next();
 };
+
+module.exports = verifyToken;

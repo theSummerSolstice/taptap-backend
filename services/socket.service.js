@@ -1,5 +1,22 @@
 const boardService = require('../services/board.service');
 const userService = require('../services/user.service');
+const { SOCKET_EVENT } = require('../constants');
+const {
+  CONNECTION,
+  JOIN_USER,
+  LEAVE_USER,
+  ADD_NOTE,
+  DELETE_NOTE,
+  UPDATE_NOTE_POSITION,
+  HISTORY_MODE_ON,
+  HISTORY_MODE_OFF,
+  SELECT_VERSION,
+  START_CATEGORIZE,
+  ADD_CATEGORY,
+  DELETE_CATEGORY,
+  UPDATE_LAYOUT,
+  DISCONNECT,
+} = SOCKET_EVENT;
 
 const boards = {};
 const currentUsers = {};
@@ -7,10 +24,10 @@ const currentUsers = {};
 const socketIO = (server) => {
   const io = require('socket.io').listen(server);
 
-  io.on('connection', (socket) => {
-    console.log('connected to socket', socket.id);
+  io.on(CONNECTION, (socket) => {
+    console.log('Connected to socket', socket.id);
 
-    socket.on('joinUser', async ({ boardId, user }) => {
+    socket.on(JOIN_USER, async ({ boardId, user }) => {
       const { _id, email, username } = user;
 
       if (!(boardId in boards)) {
@@ -31,10 +48,10 @@ const socketIO = (server) => {
       });
       currentUsers[socket.id] = boardId;
 
-      io.to(boardId).emit('joinUser', { board: boards[boardId] });
+      io.to(boardId).emit(JOIN_USER, { board: boards[boardId] });
     });
 
-    socket.on('leaveUser', async ({ boardId, userId }) => {
+    socket.on(LEAVE_USER, async ({ boardId, userId }) => {
       const filteredUserList = boards[boardId].users.filter((user) => {
         return user.id !== userId;
       });
@@ -42,70 +59,71 @@ const socketIO = (server) => {
       socket.leave(boardId);
 
       if (!filteredUserList.length) {
-        await boardService.updateCurrentNotes(boardId, boards[boardId].currentNotes);
+        await boardService.updateCurrentNotes(
+          boardId,
+          boards[boardId].currentNotes,
+        );
         delete boards[boardId];
       } else {
         boards[boardId].users = filteredUserList;
-        io.to(boardId).emit('leaveUser', { board: boards[boardId] });
+        io.to(boardId).emit(LEAVE_USER, { board: boards[boardId] });
       }
     });
 
-    socket.on('addNote', ({ boardId, note }) => {
+    socket.on(ADD_NOTE, ({ boardId, note }) => {
       boards[boardId].currentNotes.push(note);
-
-      io.to(boardId).emit('addNote', { note });
+      io.to(boardId).emit(ADD_NOTE, { note });
     });
 
-    socket.on('deleteNote', ({ boardId, noteId }) => {
+    socket.on(DELETE_NOTE, ({ boardId, noteId }) => {
       const filteredNoteList = boards[boardId].currentNotes.filter((note) => {
         return note._id !== noteId;
       });
 
       boards[boardId].currentNotes = filteredNoteList;
-      io.to(boardId).emit('deleteNote', { noteId });
+      io.to(boardId).emit(DELETE_NOTE, { noteId });
     });
 
-    socket.on('updateNotePosition', ({ boardId, noteId, position }) => {
+    socket.on(UPDATE_NOTE_POSITION, ({ boardId, noteId, position }) => {
       const updatedNoteList = boards[boardId].currentNotes.map((note) => {
-        if (note._id === noteId) {
-          return { ...note, position };
-        }
-        return note;
+        return note._id === noteId
+          ? { ...note, position }
+          : note;
       });
 
       boards[boardId].currentNotes = updatedNoteList;
-      socket.broadcast.to(boardId).emit('updateNotePosition', { noteId, position });
+      socket.broadcast.to(boardId).emit(UPDATE_NOTE_POSITION, { noteId, position });
     });
 
-    socket.on('historyModeOn', ({ boardId }) => {
-      socket.broadcast.to(boardId).emit('historyModeOn', { data: 'HISTORY' });
+    socket.on(HISTORY_MODE_ON, ({ boardId }) => {
+      socket.broadcast.to(boardId).emit(HISTORY_MODE_ON, { data: 'HISTORY' });
     });
 
-    socket.on('historyModeOff', ({ boardId }) => {
-      socket.broadcast.to(boardId).emit('historyModeOff', { data: 'EDIT' });
+    socket.on(HISTORY_MODE_OFF, ({ boardId }) => {
+      socket.broadcast.to(boardId).emit(HISTORY_MODE_OFF, { data: 'EDIT' });
     });
 
-    socket.on('selectVersion', ({ boardId, notes }) => {
-      socket.broadcast.to(boardId).emit('selectVersion', { notes });
+    socket.on(SELECT_VERSION, ({ boardId, notes }) => {
+      socket.broadcast.to(boardId).emit(SELECT_VERSION, { notes });
     });
 
-    socket.on('startCategorize', ({ boardId }) => {
-      socket.broadcast.to(boardId).emit('startCategorize', { data: true });
+    socket.on(START_CATEGORIZE, ({ boardId }) => {
+      socket.broadcast.to(boardId).emit(START_CATEGORIZE, { data: true });
     });
 
-    socket.on('addCategory', ({ boardId, categoryName, layout }) => {
-      socket.broadcast.to(boardId).emit('addCategory', { categoryName, layout });
+    socket.on(ADD_CATEGORY, ({ boardId, categoryName, layout }) => {
+      socket.broadcast.to(boardId).emit(ADD_CATEGORY, { categoryName, layout });
     });
 
-    socket.on('deleteCategory', ({ boardId, index, layout }) => {
-      socket.broadcast.to(boardId).emit('deleteCategory', { index, layout });
+    socket.on(DELETE_CATEGORY, ({ boardId, index, layout }) => {
+      socket.broadcast.to(boardId).emit(DELETE_CATEGORY, { index, layout });
     });
 
-    socket.on('updateLayout', ({ boardId, layout }) => {
-      socket.broadcast.to(boardId).emit('updateLayout', { layout });
+    socket.on(UPDATE_LAYOUT, ({ boardId, layout }) => {
+      socket.broadcast.to(boardId).emit(UPDATE_LAYOUT, { layout });
     });
 
-    socket.on('disconnect', () => {
+    socket.on(DISCONNECT, () => {
       const boardId = currentUsers[socket.id];
 
       if (!boards[boardId]) return;
