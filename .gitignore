@@ -2,3 +2,10 @@ node_modules/
 .DS_STORE
 .env
 .eslintcache
+.gitignore
+.elasticbeanstalk/
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
