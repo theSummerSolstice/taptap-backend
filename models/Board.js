@@ -74,7 +74,7 @@ const BoardSchema = new Schema({
   }],
   imageSrc: {
     type: String,
-    default: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Graph-paper.svg/768px-Graph-paper.svg.png',
+    default: 'https://drive.google.com/uc?id=1fa_RHGu_TIdsFjCrMiP26HahA_zXTT_j',
   },
   currentNotes: {
     type: [NoteSchema],

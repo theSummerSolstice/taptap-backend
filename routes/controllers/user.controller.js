@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 const userService = require('../../services/user.service');
+const { RES_MESSAGE } = require('../../constants');
+
 const { SECRET_TOKEN_KEY } = process.env;
 
 exports.googleLogin = async (req, res, next) => {
@@ -25,7 +27,7 @@ exports.googleLogin = async (req, res, next) => {
       );
 
       return res.status(201).json({
-        result: 'OK',
+        result: RES_MESSAGE.OK,
         data: { token, user: newUser },
       });
     }
@@ -40,8 +42,8 @@ exports.googleLogin = async (req, res, next) => {
     );
 
     res.status(200).json({
-      result: 'OK',
-      data: { token, user: targetUser }
+      result: RES_MESSAGE.OK,
+      data: { token, user: targetUser },
     });
   } catch (error) {
     next(error);
@@ -55,7 +57,7 @@ exports.sendUserInfo = async (req, res, next) => {
     const targetUser = await userService.getUserById(user.id);
 
     res.status(200).json({
-      result: 'OK',
+      result: RES_MESSAGE.OK,
       data: { user: targetUser },
     });
   } catch (error) {

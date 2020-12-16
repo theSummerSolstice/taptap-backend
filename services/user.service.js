@@ -1,14 +1,18 @@
 const mongoose = require('mongoose');
 const User = require('../models/User');
 
-exports.getUserByEmail = async (email) => {
-  const user = await User.findOne({ email }).populate('myBoards').populate('authorizedBoards');
+exports.getUserById = async (id) => {
+  const objectId = mongoose.Types.ObjectId(id);
+  const user = await User.findById(objectId)
+    .populate('myBoards')
+    .populate('authorizedBoards');
   return user;
 };
 
-exports.getUserById = async (id) => {
-  const objectId = mongoose.Types.ObjectId(id);
-  const user = await User.findById(objectId).populate('myBoards').populate('authorizedBoards');
+exports.getUserByEmail = async (email) => {
+  const user = await User.findOne({ email })
+    .populate('myBoards')
+    .populate('authorizedBoards');
   return user;
 };
 
@@ -25,18 +29,17 @@ exports.updateMyBoards = async (id, data) => {
   );
 };
 
+exports.updateAuthorizedBoards = async (userId, boardId) => {
+  const objectId = mongoose.Types.ObjectId(userId);
+  await User.findByIdAndUpdate(
+    objectId,
+    { $addToSet: { authorizedBoards: boardId } },
+  );
+};
+
 exports.deleteMyBoard = async (userId, boardId) => {
   await User.findByIdAndUpdate(
     userId,
     { $pull: { myBoards: boardId } },
-  );
-};
-
-exports.updateAuthorizedBoards = async (id, boardId) => {
-  const objectId = mongoose.Types.ObjectId(id);
-
-  await User.findByIdAndUpdate(
-    objectId,
-    { $addToSet: { authorizedBoards: boardId } },
   );
 };
