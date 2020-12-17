@@ -31,10 +31,13 @@ exports.updateMyBoards = async (id, data) => {
 
 exports.updateAuthorizedBoards = async (userId, boardId) => {
   const objectId = mongoose.Types.ObjectId(userId);
-  await User.findByIdAndUpdate(
+  const updatedBoard = await User.findByIdAndUpdate(
     objectId,
     { $addToSet: { authorizedBoards: boardId } },
-  );
+    { new: true },
+  ).populate('authorizedBoards');
+
+  return updatedBoard.authorizedBoards;
 };
 
 exports.deleteMyBoard = async (userId, boardId) => {

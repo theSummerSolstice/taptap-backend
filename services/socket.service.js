@@ -5,6 +5,7 @@ const {
   CONNECTION,
   JOIN_USER,
   LEAVE_USER,
+  UPDATE_AUTHORIZED_BOARDS,
   ADD_NOTE,
   DELETE_NOTE,
   UPDATE_NOTE_POSITION,
@@ -35,10 +36,6 @@ const socketIO = (server) => {
         boards[boardId] = { ...boardInfo, users: [] };
       }
 
-      if (!boards[boardId].owner.equals(user._id)) {
-        await userService.updateAuthorizedBoards(user._id, boardId);
-      }
-
       socket.join(boardId);
       boards[boardId].users.push({
         socketId: socket.id,
@@ -52,6 +49,11 @@ const socketIO = (server) => {
     });
 
     socket.on(LEAVE_USER, async ({ boardId, userId }) => {
+      if (!boards[boardId].owner.equals(userId)) {
+        const authorizedBoards = await userService.updateAuthorizedBoards(userId, boardId);
+        io.to(socket.id).emit(UPDATE_AUTHORIZED_BOARDS, { board: authorizedBoards });
+      }
+
       const filteredUserList = boards[boardId].users.filter((user) => {
         return user.id !== userId;
       });
