@@ -8,6 +8,7 @@ const SOCKET_EVENT = {
   CONNECTION: 'connection',
   JOIN_USER: 'joinUser',
   LEAVE_USER: 'leaveUser',
+  UPDATE_AUTHORIZED_BOARDS: 'updateAuthorizedBoards',
   ADD_NOTE: 'addNote',
   DELETE_NOTE: 'deleteNote',
   UPDATE_NOTE_POSITION: 'updateNotePosition',
