@@ -33,7 +33,7 @@ exports.createBoard = async (req, res, next) => {
     const newBoard = await boardService.createBoard({
       name,
       owner,
-      isPublic: Boolean(isPublic),
+      isPublic,
       authorizedUsers,
     });
 
