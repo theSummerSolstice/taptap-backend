@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
-const { ObjectId, Mixed } = Schema.Types;
+const { ObjectId } = Schema.Types;
 
 const NoteSchema = new Schema({
   _id: {
@@ -59,19 +59,6 @@ const BoardSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  layouts: [{
-    type: Mixed,
-    get: (data) => {
-      try {
-        return JSON.parse(data);
-      } catch (error) {
-        return data;
-      }
-    },
-    set: (data) => {
-      return JSON.stringify(data);
-    }
-  }],
   imageSrc: {
     type: String,
     default: 'https://drive.google.com/uc?id=1fa_RHGu_TIdsFjCrMiP26HahA_zXTT_j',
