@@ -16,7 +16,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use(cors({
-  origin: 'https://www.tap-tap.site',
+  origin: process.env.ORIGIN_URI_PROD,
   optionsSuccessStatus: 200,
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,

@@ -72,12 +72,8 @@ exports.sendInviteMail = async (email, id) => {
     to: email,
     subject: 'You are invited to taptap board👻',
     html:
-      process.env.NODE_ENV === 'production'
-        ? '<p>Please click link below.</p>' +
-          '<a href="' + process.env.ORIGIN_URI_PROD + '/board/' + id +'">Accept invitation</a>'
-        : '<p>Please click link below.</p>' +
-          '<a href="' + process.env.ORIGIN_URI_DEV + '/board/' + id +'">Accept invitation</a>',
-
+      '<p>Please click link below.</p>' +
+      '<a href="' + process.env.ORIGIN_URI_PROD + '/board/' + id +'">Accept invitation</a>',
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
