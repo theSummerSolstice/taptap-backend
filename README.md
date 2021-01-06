@@ -34,7 +34,7 @@ taptap은 브레인스토밍부터 프로젝트 회고까지 포스트잇을 활
 
 ## 📹 Simulation
 -  Youtube link: [https://youtu.be/1t4xfKtMdNY](https://youtu.be/1t4xfKtMdNY)
--  프로젝트 발표 영상(2:06:33 부터): [https://youtu.be/jMw5MIxLY3o](https://youtu.be/jMw5MIxLY3o)
+-  프로젝트 발표 영상(2:06:33 부터): [https://youtu.be/jMw5MIxLY3o?t=7570](https://youtu.be/jMw5MIxLY3o?t=7570)
 
 <img src='https://drive.google.com/uc?id=1aWXuQTVVDVEtGEo1EY3YD3hXZeOZEag6' alt='gif image'>
 
