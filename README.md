@@ -1,6 +1,6 @@
 # 🗂 taptap
 - [taptap link](https://www.tap-tap.site)
-<img src='https://drive.google.com/uc?id=1Y0qAZBgPGgDyWYNBoGlv2LxOK2sgt-Il' alt='thumbnail'>
+![Taptap](/readme-assets/taptap-thumbnail.png)
 
 ## Table of contents
 1. [taptap](#taptap)
